@@ -13,6 +13,15 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           dependency-graph: generate-and-submit
+      - name: Configure local.properties
+        env:
+          USERNAME: ${{ github.actor }}
+        run: |-
+          cat >local.properties <<EOF
+          pwsdk.maven.url=https://maven.pkg.github.com/circlefin/w3s-android-sdk
+          pwsdk.maven.username=${USERNAME}
+          pwsdk.maven.password=${GITHUB_TOKEN}
+          EOF
       - run: ./gradlew build
 
   release-sbom:
